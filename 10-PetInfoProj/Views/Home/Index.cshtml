@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <div class="row p-4">
+        <div class="col-md-4">
+            <div class="card" style="width:18rem;">
+                <div class="card-body">
+                    <h3 class="card-title">Pets</h3>
+                    <p class="card-text">Get pet details</p>
+                    <a asp-controller="Pet" asp-action="Index" class="btn btn-secondary">Click Here</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card" style="width:18rem;">
+                <div class="card-body">
+                    <h3 class="card-title">Animal Types</h3>
+                    <p class="card-text">Get animal types details</p>
+                    <a asp-controller="AnimalType" asp-action="Index" class="btn btn-secondary">Click Here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

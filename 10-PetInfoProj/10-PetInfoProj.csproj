@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>_10_PetInfoProj</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PetInfo.Database\PetInfo.Database.csproj" />
+    <ProjectReference Include="..\PetInfo.Models\PetInfo.Models.csproj" />
+    <ProjectReference Include="..\PetInfo.Repositories.Contracts\PetInfo.Repositories.Contracts.csproj" />
+    <ProjectReference Include="..\PetInfo.Repositories\PetInfo.Repositories.csproj" />
+    <ProjectReference Include="..\PetInfo.Services.Contracts\PetInfo.Services.Contracts.csproj" />
+    <ProjectReference Include="..\PetInfo.Services\PetInfo.Services.csproj" />
+  </ItemGroup>
+
+</Project>

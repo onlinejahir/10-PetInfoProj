@@ -1,0 +1,48 @@
+﻿@model AnimalTypeViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container">
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-info">
+            @ViewBag.Messagge
+        </div>
+    }
+    <div class="row p-3">
+        <div class="col-md-12">
+            <h3>Update Animal Type</h3>
+        </div>
+    </div>
+    <div class="row p-3">
+        <div class="col-md-4">
+            <form asp-controller="AnimalType" asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="AnimalTypeId" />
+                <div class="form-group mb-5">
+                    <label asp-for="AnimalTypeName" class="form-label"></label>
+                    <input asp-for="AnimalTypeName" class="form-control" />
+                    <span asp-validation-for="AnimalTypeName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Update" class="btn btn-primary w-50" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row p-3">
+        <div class="col-md-4">
+            <a asp-controller="AnimalType" asp-action="Index" class="btn btn-info">Back to List</a>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

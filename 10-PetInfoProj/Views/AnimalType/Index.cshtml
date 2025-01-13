@@ -1,0 +1,83 @@
+﻿@model IEnumerable<AnimalTypeViewModel>
+
+@{
+    ViewData["Title"] = "Index";     
+}
+<div class="container">
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-info">
+            @ViewBag.Message
+        </div>
+    }
+    <div class="row p-2">
+        <div class="col-md-12">
+            <h3>All Animal Types</h3>
+        </div>
+    </div>
+    <div class="row p-2">
+        <div class="col-md-6">
+            <a asp-controller="AnimalType" asp-action="Add" class="btn btn-primary me-2">Add Animal Type</a>
+            @* <a asp-controller="AnimalType" asp-action="Index" class="btn btn-info">Back To List</a> *@
+        </div>
+    </div>
+    <div class="row p-2">
+        <div class="col-md-8">
+            <table class="table table-striped table-bordered table-success">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AnimalTypeId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AnimalTypeName)
+                        </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AnimalTypeId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AnimalTypeName)
+                            </td>
+                            <td>
+                                <a class="btn btn-info" title="View all animals of this type" onclick="openAnimalTypePopUp(@item.AnimalTypeId)">View All</a>
+                            </td>
+                            <td>
+                                <a asp-controller="AnimalType" asp-action="Edit" asp-route-id="@item.AnimalTypeId" class="btn btn-success" title="Edit">
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a asp-controller="AnimalType" asp-action="Delete" asp-route-id="@item.AnimalTypeId" class="btn btn-danger" title="Delete" onclick="return confirm('Are you sure, if you delete this @item.AnimalTypeName type all related pets will be deleted.')">
+                                    <i class="bi bi-trash3"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openAnimalTypePopUp(animalTypeId){
+            if(!animalTypeId){
+                alert("Invalid Animal Type ID.")
+                return;
+            }
+            const url = `/AnimalType/ViewAnimalType/${animalTypeId}`;
+            const popupOptions = "width=800,height=600,scrollbars=yes,resizable=yes";
+            window.open(url, "_blank", popupOptions);
+        }
+    </script>
+}

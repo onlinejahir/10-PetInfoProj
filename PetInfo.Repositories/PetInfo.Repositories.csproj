@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PetInfo.Database\PetInfo.Database.csproj" />
+    <ProjectReference Include="..\PetInfo.Models\PetInfo.Models.csproj" />
+    <ProjectReference Include="..\PetInfo.Repositories.Contracts\PetInfo.Repositories.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>
