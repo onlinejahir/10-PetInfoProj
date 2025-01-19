@@ -66,7 +66,8 @@ namespace _10_PetInfoProj.Controllers
                 OwnerName = p.OwnerName,
                 AnimalType = p.AnimalType,
                 Address = p.Address,
-                ImageName = p.ImageName
+                ImageName = p.ImageName,
+                DescriptionFileName = p.DescriptionFileName
             });
             return View(await PaginatedList<PetViewModel>.CreateAsync(petsVM, pageNumber, pageSize));
         }
@@ -104,9 +105,9 @@ namespace _10_PetInfoProj.Controllers
                     if (!allowedExtensions.Contains(extension.ToLower()))
                     {
                         ViewBag.Message = "Invalid file type. Only JPG, JPEG, and PNG are allowed.";
-                        var animalTypes = (await _unitService.AnimalTypeService.GetAllAnimalTypeAsync());
+                        var animalTypes = await _unitService.AnimalTypeService.GetAllAnimalTypeAsync();
                         ViewBag.AnimalTypes = new SelectList(animalTypes, "AnimalTypeId", "AnimalTypeName");
-                        return View(petVM); // Return view with the same model for error correction
+                        return View(petVM); // Return view with the same viewmodel for error correction
                     }
 
                     // Append timestamp to ensure unique file name
@@ -124,6 +125,41 @@ namespace _10_PetInfoProj.Controllers
                 else
                 {
                     ViewBag.Message = "Please upload an image.";
+                    return View(petVM);
+                }
+
+                //Handle description file upload
+                if (petVM.DescriptionFile != null)
+                {
+                    //Generate a unique file name
+                    string descriptionFileName = Path.GetFileNameWithoutExtension(petVM.DescriptionFile.FileName);
+                    string descriptionFileExtension = Path.GetExtension(petVM.DescriptionFile.FileName).ToLower();
+
+                    //validate the file extension
+                    var allowedFileExtensions = new[] { ".jpg", ".jpeg", ".png", ".pdf" };
+                    if (!allowedFileExtensions.Contains(descriptionFileExtension))
+                    {
+                        ViewBag.Message = "Invalid file type. Only jpg, jpeg, png and pdf are allowed.";
+                        IEnumerable<AnimalType> animalTypes = await _unitService.AnimalTypeService.GetAllAnimalTypeAsync();
+                        ViewBag.AnimalTypes = new SelectList(animalTypes, "AnimalTypeId", "AnimalTypeName");
+                        return View(petVM); // Return view with the same viewmodel for error correction
+                    }
+
+                    //Append timestamp to ensure unique file name
+                    petVM.DescriptionFileName = descriptionFileName + DateTime.Now.ToString("yymmssfff") + descriptionFileExtension;
+
+                    //Combine path
+                    string path = Path.Combine(wwwRootPath, "descriptionfiles", petVM.DescriptionFileName);
+
+                    //Save the file in wwwroot/descriptionfiles folder
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await petVM.DescriptionFile.CopyToAsync(fileStream);
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = "Please upload pet description";
                     return View(petVM);
                 }
 
@@ -146,6 +182,30 @@ namespace _10_PetInfoProj.Controllers
                 ViewBag.Message = "Sorry! Information hasn't been saved";
                 return View(petVM);
             }
+        }
+        [HttpGet]
+        //Action method to download pet description file
+        public async Task<IActionResult> DownloadDescription(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return NotFound("File not found.");
+            }
+            string wwwRootPath = _hostEnvironment.WebRootPath;
+            string filePath = Path.Combine(wwwRootPath, "descriptionfiles", fileName);
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound("File not found.");
+            }
+            //Read the file content
+            var memory = new MemoryStream();
+            using (var fileStream = new FileStream(filePath, FileMode.Open))
+            {
+                await fileStream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            //Return the file for download
+            return File(memory, "Application/pdf", fileName);
         }
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
@@ -182,7 +242,7 @@ namespace _10_PetInfoProj.Controllers
 
             string wwwRootPath = _hostEnvironment.WebRootPath;
 
-            // Handle image upload
+            // Handle new image upload
             if (petEditVM.ImageFile != null)
             {
                 // Generate a unique file name
@@ -220,8 +280,49 @@ namespace _10_PetInfoProj.Controllers
                     }
                 }
 
-                // Update the ImageName in the database
+                // Update the new ImageName in the database
                 existingPet.ImageName = newImageName;
+            }
+
+            //Handle new description file upload
+            if (petEditVM.DescriptionFile != null)
+            {
+                //Generate a unique file name
+                string descriptionFileName = Path.GetFileNameWithoutExtension(petEditVM.DescriptionFile.FileName);
+                string descriptionFileExtension = Path.GetExtension(petEditVM.DescriptionFile.FileName).ToLower();
+
+                //validate the file extension
+                var allowedFileExtensions = new[] { ".jpg", ".jpeg", ".png", ".pdf" };
+                if (!allowedFileExtensions.Contains(descriptionFileExtension))
+                {
+                    ViewBag.Message = "Invalid file type. Only jpg, jpeg, png and pdf are allowed.";
+                    IEnumerable<AnimalType> animalTypes = await _unitService.AnimalTypeService.GetAllAnimalTypeAsync();
+                    ViewBag.AnimalTypes = new SelectList(animalTypes, "AnimalTypeId", "AnimalTypeName");
+                    return View(petEditVM); // Return view with the same viewmodel for error correction
+                }
+
+                //Append timestamp to ensure unique file name
+                string newDescriptionFileName = descriptionFileName + DateTime.Now.ToString("yymmssfff") + descriptionFileExtension;
+
+                //Combine path
+                string newDescriptionFilePath = Path.Combine(wwwRootPath, "descriptionfiles", newDescriptionFileName);
+
+                //Save the new file in wwwroot/descriptionfiles folder
+                using (var fileStream = new FileStream(newDescriptionFilePath, FileMode.Create))
+                {
+                    await petEditVM.DescriptionFile.CopyToAsync(fileStream);
+                }
+                // Remove the old description file from wwwroot/descriptionfiles
+                if (!string.IsNullOrEmpty(existingPet.DescriptionFileName))
+                {
+                    string oldDescriptionFilePath = Path.Combine(wwwRootPath, "images", existingPet.DescriptionFileName);
+                    if (System.IO.File.Exists(oldDescriptionFilePath))
+                    {
+                        System.IO.File.Delete(oldDescriptionFilePath);
+                    }
+                }
+                // Update the new DescriptionFileName in the database
+                existingPet.DescriptionFileName = newDescriptionFileName;
             }
 
             //Update other fields

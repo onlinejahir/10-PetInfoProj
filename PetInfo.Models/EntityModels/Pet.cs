@@ -27,6 +27,7 @@ namespace PetInfo.Models.EntityModels
         public string? Address { get; set; }
         [StringLength(100)]
         public string ImageName { get; set; } = string.Empty;
+        public string? DescriptionFileName { get; set; }
         //Relationship with AnimalType
         [ForeignKey("AnimalType")]
         public int AnimalTypeId { get; set; }  //Foreign key

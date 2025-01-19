@@ -27,6 +27,12 @@ namespace _10_PetInfoProj.ViewModels.PetVM
         //[Required(ErrorMessage = "Please upload the pet image")]
         //[FileExtensions(Extensions = "jpg,jpeg,png", ErrorMessage = "Only image files (JPG, JPEG, PNG) are allowed.")]
         public IFormFile? ImageFile { get; set; }
+        [StringLength(100)]
+        public string? DescriptionFileName { get; set; }
+        [Display(Name = "Upload Description")]
+        //[Required(ErrorMessage = "Please upload the pet description")]
+        //[FileExtensions(Extensions = "jpg,jpeg,png,pdf", ErrorMessage = "Only image or pdf files (jpg, jpeg, png, pdf) are allowed.")]
+        public IFormFile? DescriptionFile { get; set; }
         [Required]
         [Display(Name = "Animal type")]
         public int AnimalTypeId { get; set; }

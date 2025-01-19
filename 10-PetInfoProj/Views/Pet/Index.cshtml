@@ -59,6 +59,9 @@
                             @Html.DisplayNameFor(model => model.Items[0].Address)
                         </th>
                         <th scope="col">
+                            @Html.DisplayName("Download Description")
+                        </th>
+                        <th scope="col">
                             @Html.DisplayName("Image")
                         </th>
                         <th></th>
@@ -90,6 +93,18 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Address)
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.DescriptionFileName))
+                                {
+                                    <a asp-controller="Pet" asp-action="DownloadDescription" asp-route-fileName="@item.DescriptionFileName" class="btn btn-info" title="Download description">
+                                        <i class="bi bi-box-arrow-down"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span>No file</span>
+                                }
                             </td>
                             <td>
                                 <img src="@("~/images/" + item.ImageName)" asp-append-version="true" style="width:60px;" />
