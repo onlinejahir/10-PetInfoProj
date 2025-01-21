@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\themetwo\**" />
+    <Content Remove="wwwroot\themetwo\**" />
+    <EmbeddedResource Remove="wwwroot\themetwo\**" />
+    <None Remove="wwwroot\themetwo\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -19,6 +26,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\descriptionfiles\" />
+    <Folder Include="wwwroot\theme\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -28,5 +28,9 @@ namespace _10_PetInfoProj.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        public IActionResult ThemeTest()
+        {
+            return View("_MyLayout");
+        }
     }
 }
