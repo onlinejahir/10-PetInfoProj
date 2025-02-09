@@ -13,7 +13,8 @@ types and their associated data, offering functionalities such as:</p>
 - One-to-Many Relationships: Implementing association relationships for structured
   data management.
 - Pop-Up Windows: Displaying related data dynamically in new browser windows.
-- Custom theme added: I've implemented a custom theme for the layout to enhance the visual appearance and user experience.
+- Custom theme added: Implemented a custom theme for the layout to enhance the visual appearance and user experience.
+- Added pagination to improve data navigation and enhance user experience.
 
 <p>This project is an excellent starting point for anyone learning ASP.NET Core MVC or looking
 to implement a real-world application with a clean and scalable architecture.</p>
